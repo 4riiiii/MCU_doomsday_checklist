@@ -1,10 +1,16 @@
 <!DOCTYPE html>
+<!-- Tells the browser to render this using modern HTML5 rules -->
 <html lang="en">
+<!-- lang="en" helps screen readers and search engines know the page language -->
 <head>
     <meta charset="UTF-8">
+    <!-- UTF-8 lets the page correctly display special characters like the "—" and "✓" used below -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Without this, mobile browsers zoom the page out to look like a tiny desktop site. This forces it to match the phone's actual width -->
     <title>The Road to Doomsday — MCU Watch Order</title>
+    <!-- Text shown in the browser tab and search results -->
     <meta name="description" content="An essential Marvel Cinematic Universe watch order timeline leading to Avengers: Doomsday.">
+    <!-- Used by search engines / link previews (e.g. when you paste this URL into Slack) -->
 
     <!--
       ============================================================
@@ -20,14 +26,27 @@
       ============================================================
     -->
 
+    <!-- These two lines speed up font loading: "preconnect" tells the
+         browser to open a connection to Google's font servers early,
+         before it even knows which fonts it needs. -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- This is the actual font stylesheet — it loads 4 font families at specific weights (the numbers after "wght@") -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
+    <!-- This is the only line connecting this file to your CSS.
+         It must be a file named style.css sitting in the SAME folder
+         as this HTML file, or you'll need to fix the path here. -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<!-- =========================================================
+     NAV BAR — sticky bar at the top with quick-jump links.
+     Each <a href="#phase-1"> jumps to the <section id="phase-1">
+     later in the page. This is plain HTML anchor navigation,
+     no JavaScript needed. Styled in CSS under ".nav".
+========================================================== -->
 <nav class="nav">
     <div class="nav-brand"><strong>SACRED TIMELINE</strong> // WATCH ORDER</div>
     <ul class="nav-links">
@@ -41,47 +60,102 @@
     </ul>
 </nav>
 
-<!-- ================= HERO ================= -->
+<!-- =========================================================
+     HERO — the big full-screen intro. Styled under ".hero" in
+     the CSS. The gradient text, glow, and grid background are
+     all pure CSS tricks applied to these plain HTML elements.
+========================================================== -->
 <section class="hero">
     <div class="hero-eyebrow">Multiverse Saga · Phases 01–06</div>
     <h1 class="hero-title">THE ROAD<br>TO DOOMSDAY</h1>
+    <!-- <br> forces a line break inside the title exactly where we want it -->
     <p class="hero-sub">Every essential film and series that feeds into <strong>Avengers: Doomsday</strong> —
         three universes, one collision course. Check off what you've watched as you go.</p>
     <div class="hero-date"><span class="dot"></span> IN THEATERS DECEMBER 18, 2026</div>
+    <!-- the "dot" span is an empty element — CSS turns it into a small glowing circle, it doesn't need any text/content itself -->
     <div class="scroll-cue"><span>Begin</span><span class="line"></span></div>
 </section>
 
+<!-- =========================================================
+     TIMELINE WRAPPER — a plain container that centers all the
+     phase sections and caps their max width (see ".timeline" in CSS)
+========================================================== -->
 <div class="timeline">
 
-    <!-- ================= PHASE 1 ================= -->
+    <!-- =============================================================
+         PHASE 1 — full detailed comments here. Phases 2–6 below
+         follow this exact same pattern, so they're commented more
+         briefly — refer back up here if you forget what a piece does.
+    ============================================================== -->
+
+    <!-- Every phase is a <section> with a unique id (used by the nav
+         links above) and an inline style setting --phase-color.
+         That CSS variable is what makes THIS phase's dot, spine line,
+         and text accents all render in amber instead of, say, violet. -->
     <section class="phase" id="phase-1" style="--phase-color:var(--amber)">
+
+        <!-- The little intro text explaining this era, centered above the entries -->
         <div class="phase-header">
             <span class="phase-code">Phase 01 // Origins</span>
             <h2 class="phase-title">Where It Began</h2>
             <p class="phase-desc">The Sacred Timeline's opening thread — one Earth, one team forming.</p>
         </div>
+
+        <!-- .spine-track is the container CSS draws the glowing vertical
+             line through (via ::before in the CSS — you won't see a
+             separate HTML element for the line itself, it's generated) -->
         <div class="spine-track">
             <ul class="entries">
+                <!-- each movie/show is one <li class="entry"> -->
 
                 <li class="entry">
+                    <!-- This checkbox is invisible on screen (hidden by CSS)
+                         but it's the actual toggle: clicking the label below
+                         checks/unchecks it, and CSS reacts to :checked to
+                         style the card and marker differently. The "id" here
+                         must be unique on the whole page — e1, e2, e3... -->
                     <input type="checkbox" id="e1" class="entry-check">
+
+                    <!-- the small circle dot that sits on the spine line -->
                     <div class="entry-marker"></div>
+
+                    <!-- Using a <label for="e1"> instead of a <div> makes the
+                         ENTIRE card clickable to toggle the checkbox above —
+                         you don't need to hit a tiny checkbox precisely. -->
                     <label for="e1" class="entry-card">
-                        <div class="poster-frame"><img class="poster" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='445'%3E%3Crect width='100%25' height='100%25' fill='%230d1117'/%3E%3Ctext x='50%25' y='50%25' fill='%233a4354' font-family='monospace' font-size='14' text-anchor='middle' dy='.3em'%3EPOSTER%3C/text%3E%3C/svg%3E" alt="Iron Man poster — replace src with real poster URL"></div>
+
+                        <!-- the little rectangle that holds the poster image -->
+                        <div class="poster-frame">
+                            <!-- REPLACE the src below with a real poster URL when you have one.
+                                 Right now it's a placeholder image built directly into the HTML
+                                 using a "data URI" (a tiny SVG image encoded as text, so it
+                                 doesn't need to load a separate file). -->
+                            <img class="poster" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTCythtaM-iOKWi0JUUiQtcC3CH8o9bhUDiaFY53ZRWXFa4mGuVRFevtTZlWDusVoP6dl3e&s=10 width='300' height='445'%3E%3Crect width='100%25' height='100%25' fill='%230d1117'/%3E%3Ctext x='50%25' y='50%25' fill='%233a4354' font-family='monospace' font-size='14' text-anchor='middle' dy='.3em'%3EPOSTER%3C/text%3E%3C/svg%3E" alt="Iron Man poster — replace src with real poster URL">
+                            <!-- alt text describes the image for screen readers and shows if the image fails to load -->
+                        </div>
+
                         <div class="entry-body">
                             <div class="entry-meta">2008 · Movie · 2h6m</div>
                             <div class="entry-title">Iron Man</div>
                             <p class="entry-note">Where the shared-universe experiment began — Tony Stark builds the suit, and Nick Fury drops the word "Avengers."</p>
+
+                            <!-- Two spans, only one visible at a time (controlled by
+                                 CSS depending on whether the checkbox is checked) -->
                             <div class="entry-status"><span class="status-unwatched">Not watched</span><span class="status-watched">✓ Watched</span></div>
                         </div>
                     </label>
                 </li>
 
+                <!-- Every entry below repeats the EXACT same structure as
+                     above — checkbox, marker, label-card, poster, meta,
+                     title, note, status. Only the id (e2, e3...) and the
+                     content text change. -->
+
                 <li class="entry">
                     <input type="checkbox" id="e2" class="entry-check">
                     <div class="entry-marker"></div>
                     <label for="e2" class="entry-card">
-                        <div class="poster-frame"><img class="poster" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='445'%3E%3Crect width='100%25' height='100%25' fill='%230d1117'/%3E%3Ctext x='50%25' y='50%25' fill='%233a4354' font-family='monospace' font-size='14' text-anchor='middle' dy='.3em'%3EPOSTER%3C/text%3E%3C/svg%3E" alt="Thor poster — replace src with real poster URL"></div>
+                        <div class="poster-frame"><img class="poster" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkmfgN3Pr1Jv3vSAy6iZmBO2YGGio4I55rEvB2MV0Hc7tT2P16UWYiYC5_MJvadL48qfJemw&s=10 width='300' height='445'%3E%3Crect width='100%25' height='100%25' fill='%230d1117'/%3E%3Ctext x='50%25' y='50%25' fill='%233a4354' font-family='monospace' font-size='14' text-anchor='middle' dy='.3em'%3EPOSTER%3C/text%3E%3C/svg%3E" alt="Thor poster — replace src with real poster URL"></div>
                         <div class="entry-body">
                             <div class="entry-meta">2011 · Movie · 1h55m</div>
                             <div class="entry-title">Thor</div>
@@ -95,7 +169,7 @@
                     <input type="checkbox" id="e3" class="entry-check">
                     <div class="entry-marker"></div>
                     <label for="e3" class="entry-card">
-                        <div class="poster-frame"><img class="poster" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='445'%3E%3Crect width='100%25' height='100%25' fill='%230d1117'/%3E%3Ctext x='50%25' y='50%25' fill='%233a4354' font-family='monospace' font-size='14' text-anchor='middle' dy='.3em'%3EPOSTER%3C/text%3E%3C/svg%3E" alt="Captain America: The First Avenger poster — replace src with real poster URL"></div>
+                        <div class="poster-frame"><img class="poster" src="https://m.media-amazon.com/images/M/MV5BMTQ5Mjc2OTk0Ml5BMl5BanBnXkFtZTcwMTU2ODk5NQ@@._V1_.jpg width='300' height='445'%3E%3Crect width='100%25' height='100%25' fill='%230d1117'/%3E%3Ctext x='50%25' y='50%25' fill='%233a4354' font-family='monospace' font-size='14' text-anchor='middle' dy='.3em'%3EPOSTER%3C/text%3E%3C/svg%3E" alt="Captain America: The First Avenger poster — replace src with real poster URL"></div>
                         <div class="entry-body">
                             <div class="entry-meta">2011 · Movie · 2h4m</div>
                             <div class="entry-title">Captain America: The First Avenger</div>
@@ -109,7 +183,7 @@
                     <input type="checkbox" id="e4" class="entry-check">
                     <div class="entry-marker"></div>
                     <label for="e4" class="entry-card">
-                        <div class="poster-frame"><img class="poster" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='445'%3E%3Crect width='100%25' height='100%25' fill='%230d1117'/%3E%3Ctext x='50%25' y='50%25' fill='%233a4354' font-family='monospace' font-size='14' text-anchor='middle' dy='.3em'%3EPOSTER%3C/text%3E%3C/svg%3E" alt="The Avengers poster — replace src with real poster URL"></div>
+                        <div class="poster-frame"><img class="poster" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTP1TPM-tG0Nnml7lwz9smCPFiZ8yYVWf-ZYp2pVG5_mLl3AMpwYAjo4Oxt&s=10 width='300' height='445'%3E%3Crect width='100%25' height='100%25' fill='%230d1117'/%3E%3Ctext x='50%25' y='50%25' fill='%233a4354' font-family='monospace' font-size='14' text-anchor='middle' dy='.3em'%3EPOSTER%3C/text%3E%3C/svg%3E" alt="The Avengers poster — replace src with real poster URL"></div>
                         <div class="entry-body">
                             <div class="entry-meta">2012 · Movie · 2h23m</div>
                             <div class="entry-title">The Avengers</div>
@@ -123,7 +197,11 @@
         </div>
     </section>
 
-    <!-- ================= PHASE 2 ================= -->
+    <!-- =============================================================
+         PHASE 2 — same structure as Phase 1. Only difference:
+         --phase-color is now var(--flame), so every dot/line/label
+         in this section turns orange-red instead of amber.
+    ============================================================== -->
     <section class="phase" id="phase-2" style="--phase-color:var(--flame)">
         <div class="phase-header">
             <span class="phase-code">Phase 02 // Build-Up</span>
@@ -193,7 +271,9 @@
         </div>
     </section>
 
-    <!-- ================= PHASE 3 ================= -->
+    <!-- =============================================================
+         PHASE 3 — same pattern again, color is now var(--rose)
+    ============================================================== -->
     <section class="phase" id="phase-3" style="--phase-color:var(--rose)">
         <div class="phase-header">
             <span class="phase-code">Phase 03 // Infinity Saga Climax</span>
@@ -263,7 +343,14 @@
         </div>
     </section>
 
-    <!-- ================= PHASE 4 ================= -->
+    <!-- =============================================================
+         PHASE 4 — color is now var(--violet). NOTE the extra class
+         "multiverse" on this <section>. That class is what triggers
+         the CSS rules ".phase.multiverse .spine-track::after" and
+         ".thread-r", which draw the two extra braided lines beside
+         the main spine. We also add a real <div class="thread-r">
+         inside .spine-track for that third line (explained in CSS).
+    ============================================================== -->
     <section class="phase multiverse" id="phase-4" style="--phase-color:var(--violet)">
         <div class="phase-header">
             <span class="phase-code">Phase 04 // The Multiverse Opens</span>
@@ -271,6 +358,8 @@
             <p class="phase-desc">The Sacred Timeline branches for the first time — everything after this point is fractured.</p>
         </div>
         <div class="spine-track">
+            <!-- this empty div exists ONLY so CSS has something to style
+                 into the third "braided" line — it has no text content -->
             <div class="thread-r"></div>
             <ul class="entries">
 
@@ -334,7 +423,9 @@
         </div>
     </section>
 
-    <!-- ================= PHASE 5 ================= -->
+    <!-- =============================================================
+         PHASE 5 — same "multiverse" pattern, color is var(--azure)
+    ============================================================== -->
     <section class="phase multiverse" id="phase-5" style="--phase-color:var(--azure)">
         <div class="phase-header">
             <span class="phase-code">Phase 05 // The Doom Pivot</span>
@@ -367,6 +458,7 @@
                         <div class="entry-body">
                             <div class="entry-meta">2024 · Movie · 2h8m</div>
                             <div class="entry-title">Deadpool &amp; Wolverine</div>
+                            <!-- &amp; is the HTML "escape code" for the & character — using a raw & inside text can occasionally confuse browsers -->
                             <p class="entry-note">Brings the Fox X-Men universe into the Sacred Timeline — the returning legacy cast starts here.</p>
                             <div class="entry-status"><span class="status-unwatched">Not watched</span><span class="status-watched">✓ Watched</span></div>
                         </div>
@@ -405,7 +497,9 @@
         </div>
     </section>
 
-    <!-- ================= PHASE 6 ================= -->
+    <!-- =============================================================
+         PHASE 6 — same "multiverse" pattern, color is var(--emerald)
+    ============================================================== -->
     <section class="phase multiverse" id="phase-6" style="--phase-color:var(--emerald)">
         <div class="phase-header">
             <span class="phase-code">Phase 06 // The Doorstep</span>
@@ -476,9 +570,21 @@
         </div>
     </section>
 
-    <!-- ================= CONVERGENCE VISUAL ================= -->
+    <!-- =========================================================
+         CONVERGENCE VISUAL — a hand-drawn inline SVG (not an image
+         file, the actual shape data lives right here in the HTML).
+         Three curved <path> lines start spread apart at the top and
+         curve together to meet at one point at the bottom, visually
+         representing "three universes becoming one." Colored using
+         <linearGradient> definitions in <defs> so each line fades
+         from its phase color into gold.
+         aria-hidden="true" tells screen readers to skip this — it's
+         purely decorative, the meaning is already in the text label
+         right below it.
+    ========================================================== -->
     <svg class="convergence" viewBox="0 0 200 130" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs>
+            <!-- each gradient goes from a phase color (top) to gold (bottom) -->
             <linearGradient id="threadL" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="#7c5cff"/>
                 <stop offset="100%" stop-color="#f4c542"/>
@@ -491,16 +597,25 @@
                 <stop offset="0%" stop-color="#00e6a0"/>
                 <stop offset="100%" stop-color="#f4c542"/>
             </linearGradient>
+            <!-- this filter creates the soft glow around the gold dot at the bottom -->
             <filter id="glow"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
+        <!-- "Q" in the path data means "quadratic curve" — draws a smooth
+             bend from the start point, through a control point, to the end point -->
         <path d="M20,0 Q20,90 100,128" stroke="url(#threadL)" stroke-width="2" opacity="0.8"/>
         <path d="M100,0 Q100,80 100,128" stroke="url(#threadM)" stroke-width="2" opacity="0.8"/>
         <path d="M180,0 Q180,90 100,128" stroke="url(#threadR)" stroke-width="2" opacity="0.8"/>
+        <!-- the glowing gold dot where all three lines meet -->
         <circle cx="100" cy="128" r="5" fill="#f4c542" filter="url(#glow)"/>
     </svg>
     <p class="convergence-label">Three Universes // One Collision</p>
 
-    <!-- ================= FINALE ================= -->
+    <!-- =========================================================
+         FINALE — the big Doomsday callout card. Structurally
+         similar to a regular entry card, but styled uniquely under
+         ".finale" in the CSS (gold border/glow, bigger poster, no
+         checkbox since there's nothing to "mark watched" yet).
+    ========================================================== -->
     <section class="finale" id="finale">
         <div class="finale-poster"><img class="poster" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='445'%3E%3Crect width='100%25' height='100%25' fill='%230d1117'/%3E%3Ctext x='50%25' y='50%25' fill='%233a4354' font-family='monospace' font-size='14' text-anchor='middle' dy='.3em'%3EPOSTER%3C/text%3E%3C/svg%3E" alt="Avengers Doomsday poster — replace src with real poster URL"></div>
         <div class="finale-eyebrow">Phase 06 // The Payoff</div>
@@ -510,7 +625,11 @@
     </section>
 
 </div>
+<!-- closes .timeline -->
 
+<!-- =========================================================
+     FOOTER — simple closing line, styled minimally under "footer" in CSS
+========================================================== -->
 <footer>
     Built for the marathon before the multiverse collides.
 </footer>

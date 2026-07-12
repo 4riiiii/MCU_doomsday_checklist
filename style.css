@@ -1,0 +1,537 @@
+/* =============================================================
+   DESIGN TOKENS
+   These are CSS custom properties (variables). Defining them once
+   here means we can reuse "var(--text)" everywhere instead of
+   typing the same hex code 50 times — and if you want to change
+   the whole site's color scheme, you only edit it in ONE place.
+============================================================= */
+:root{
+    /* ---- Background layers, darkest to slightly lighter ---- */
+    --bg:#05070a;              /* the page's base background color, near-black */
+    --bg-alt:#0a0e14;          /* a slightly lighter black, used behind posters */
+    --surface:#0d1117;         /* background color for cards */
+    --surface-2:#121824;       /* a touch lighter than surface, used in gradients on cards */
+
+    /* ---- Borders ---- */
+    --border:rgba(255,255,255,0.08);      /* faint white border, 8% opacity */
+    --border-soft:rgba(255,255,255,0.05); /* even fainter border, used on the nav bar */
+
+    /* ---- Text colors, brightest to dimmest ---- */
+    --text:#e8ecf1;        /* main text color, near-white */
+    --text-dim:#8b95a5;    /* secondary/muted text, like descriptions */
+    --text-faint:#4a5568;  /* the dimmest text, for tiny labels nobody needs to focus on */
+
+    /* ---- Phase accent colors ----
+       Each "era" of the timeline gets its own color so the page
+       visually communicates progress as you scroll down. */
+    --amber:#ffb238;    /* Phase 1 color */
+    --flame:#ff6b4a;    /* Phase 2 color */
+    --rose:#ff3d6e;     /* Phase 3 color */
+    --violet:#7c5cff;   /* Phase 4 color */
+    --azure:#5b8cff;    /* Phase 5 color */
+    --emerald:#00e6a0;  /* Phase 6 color */
+    --gold:#f4c542;     /* Finale / convergence color */
+
+    /* ---- Fonts ----
+       Each variable maps a "role" (display, heading, body, mono)
+       to an actual font-family. Change the font here and it
+       updates everywhere that role is used. */
+    --font-display:'Orbitron', sans-serif;      /* big hero/finale titles */
+    --font-head:'Space Grotesk', sans-serif;    /* section + card headings */
+    --font-body:'Inter', sans-serif;            /* normal paragraph text */
+    --font-mono:'JetBrains Mono', monospace;    /* small labels, eyebrows, meta text */
+
+    /* ---- Reusable corner radius values ---- */
+    --radius:14px;      /* used on big elements like cards */
+    --radius-sm:8px;     /* used on small elements like the poster frame */
+}
+
+/* =============================================================
+   RESET / BASE STYLES
+   Browsers apply their own default spacing and box-sizing.
+   These rules flatten that out so our custom CSS behaves
+   predictably everywhere.
+============================================================= */
+
+/* Makes padding/border count INSIDE an element's declared width,
+   instead of adding on top of it. This is the #1 most common
+   CSS reset rule — almost every site uses it. */
+*,*::before,*::after{ box-sizing:border-box; }
+
+/* Makes clicking a nav link (like "#phase-1") glide smoothly
+   down the page instead of jumping instantly. */
+html{ scroll-behavior:smooth; }
+
+body{
+    margin:0; /* remove the browser's default 8px margin around the page */
+    /* Layer three backgrounds on top of each other using commas:
+       two soft radial "glow" gradients (violet top-center, green
+       top-right) sit above the solid --bg color underneath them.
+       This is what gives the page its subtle nebula/space feel. */
+    background:
+            radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124,92,255,0.12), transparent 60%),
+            radial-gradient(ellipse 60% 40% at 85% 15%, rgba(0,230,160,0.08), transparent 60%),
+            var(--bg);
+    color:var(--text);            /* default text color for the whole page */
+    font-family:var(--font-body); /* default font for the whole page */
+    line-height:1.5;              /* comfortable spacing between lines of text */
+    -webkit-font-smoothing:antialiased; /* smoother font rendering on Mac/Safari */
+}
+
+a{ color:inherit; } /* links use whatever text color surrounds them, not browser-default blue */
+h1,h2,h3{ margin:0; font-family:var(--font-head); } /* remove default heading margins, use our heading font */
+p{ margin:0; } /* remove default paragraph margins so we control spacing ourselves */
+img{ display:block; max-width:100%; } /* images never overflow their container, no weird inline gap under them */
+
+/* Styles the little highlight color when you select/drag over text with your mouse */
+::selection{ background:var(--violet); color:#fff; }
+
+/* ---- Keyboard accessibility ----
+   When someone tabs through the page with a keyboard, this puts
+   a visible green outline around whatever's focused, so they can
+   see where they are. Removing this entirely would break
+   accessibility for keyboard users. */
+a:focus-visible, label:focus-within, button:focus-visible{
+    outline:2px solid var(--emerald);
+    outline-offset:3px;
+    border-radius:4px;
+}
+
+/* =============================================================
+   NAV BAR (the sticky bar at the very top of the page)
+============================================================= */
+.nav{
+    position:sticky; top:0; z-index:50; /* sticks to the top of the viewport as you scroll; z-index keeps it above other content */
+    display:flex; align-items:center; justify-content:space-between; /* puts brand on the left, links on the right */
+    gap:1rem;
+    padding:0.9rem 1.5rem;
+    background:rgba(5,7,10,0.75);   /* semi-transparent black so content can be seen blurring behind it */
+    backdrop-filter:blur(10px);     /* the actual "frosted glass" blur effect behind the nav */
+    border-bottom:1px solid var(--border-soft); /* thin separator line under the nav */
+}
+.nav-brand{
+    font-family:var(--font-mono);   /* mono font gives it a "system label" feel */
+    font-size:0.72rem;
+    letter-spacing:0.14em;          /* extra spacing between letters, common for small caps-style labels */
+    color:var(--text-dim);
+    text-transform:uppercase;
+    white-space:nowrap;             /* never wraps to a second line */
+}
+.nav-brand strong{ color:var(--text); font-weight:600; } /* the "SACRED TIMELINE" part is brighter than the rest */
+.nav-links{
+    display:flex; gap:1.1rem;           /* lay nav links out horizontally with spacing between them */
+    list-style:none; margin:0; padding:0; /* remove default <ul> bullets/indentation */
+    overflow-x:auto;                     /* if the screen is too narrow, links scroll sideways instead of wrapping */
+    font-family:var(--font-mono);
+    font-size:0.68rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+}
+.nav-links a{
+    text-decoration:none;    /* remove the default underline on links */
+    color:var(--text-faint);
+    white-space:nowrap;
+    transition:color .2s ease;     /* smoothly animates the color change on hover instead of snapping */
+    padding-bottom:2px;
+    border-bottom:1px solid transparent; /* invisible border reserves space so hover doesn't shift layout */
+}
+.nav-links a:hover{ color:var(--text); border-color:var(--border); } /* brighten + underline on hover */
+.nav-links::-webkit-scrollbar{ display:none; } /* hides the scrollbar for the horizontal-scroll nav on Chrome/Safari */
+
+/* =============================================================
+   HERO SECTION (the big full-screen intro at the top)
+============================================================= */
+.hero{
+    min-height:92vh; /* almost the full screen height ("vh" = % of viewport height) */
+    display:flex; flex-direction:column; align-items:center; justify-content:center; /* centers everything vertically + horizontally */
+    text-align:center;
+    padding:6rem 1.5rem 4rem;
+    position:relative;   /* needed so the ::before grid background can be positioned relative to this box */
+    overflow:hidden;      /* clips anything that pokes outside the hero's edges */
+}
+/* This pseudo-element draws the faint graph-paper grid you see
+   behind the hero title. It's a separate "virtual" element so it
+   doesn't interfere with the real content. */
+.hero::before{
+    content:'';                 /* pseudo-elements need a (can be empty) content value to render at all */
+    position:absolute; inset:0; /* stretches to fill the entire .hero box */
+    background-image:
+            linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size:52px 52px;  /* size of each grid square */
+    /* fades the grid out toward the edges using a radial mask, so it
+       looks like a soft spotlight instead of a hard-edged grid */
+    mask-image:radial-gradient(ellipse 60% 55% at 50% 40%, black, transparent 75%);
+    pointer-events:none; /* lets clicks pass through to whatever's underneath */
+}
+.hero-eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    letter-spacing:0.35em; /* very wide letter spacing, classic "sci-fi label" look */
+    text-transform:uppercase;
+    color:var(--violet);
+    margin-bottom:1.4rem;
+    z-index:1; /* sits above the .hero::before grid background */
+}
+.hero-title{
+    font-family:var(--font-display);
+    font-weight:900;
+    font-size:clamp(3rem, 11vw, 8rem); /* responsive font size: never smaller than 3rem, never bigger than 8rem, scales with viewport width in between */
+    line-height:0.95; /* tight line height so the two-line title doesn't have huge gaps */
+    letter-spacing:0.01em;
+    /* This trio of properties turns the text itself into a gradient:
+       white at the top fading down into violet. */
+    background:linear-gradient(180deg, #ffffff 0%, #b9c2d4 55%, var(--violet) 130%);
+    -webkit-background-clip:text; /* clips the gradient background to the shape of the text (Safari/Chrome) */
+    background-clip:text;         /* standard version of the same property */
+    color:transparent;            /* text itself must be transparent so the gradient shows through */
+    text-shadow:0 0 80px rgba(124,92,255,0.25); /* soft violet glow behind the title */
+    z-index:1;
+    margin-bottom:1.2rem;
+}
+.hero-sub{
+    max-width:36rem; /* keeps the paragraph from stretching too wide and becoming hard to read */
+    color:var(--text-dim);
+    font-size:1.02rem;
+    z-index:1;
+    margin-bottom:2.2rem;
+}
+.hero-sub strong{ color:var(--text); font-weight:600; } /* makes bolded words inside the subtitle stand out brighter */
+.hero-date{
+    display:inline-flex; align-items:center; gap:0.6rem; /* lays the dot + text side by side, vertically centered */
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    letter-spacing:0.08em;
+    color:var(--gold);
+    border:1px solid rgba(244,197,66,0.35); /* thin gold border, gives it a "badge/pill" look */
+    background:rgba(244,197,66,0.06);       /* very faint gold tint fill */
+    padding:0.55rem 1.1rem;
+    border-radius:999px; /* a huge radius on a small element = fully rounded "pill" shape */
+    z-index:1;
+}
+.hero-date .dot{
+    width:6px; height:6px; border-radius:50%; /* a tiny circle */
+    background:var(--gold);
+    box-shadow:0 0 10px var(--gold); /* glow around the dot */
+    animation:pulse 1.8s ease-in-out infinite; /* runs the "pulse" keyframes below forever */
+}
+.scroll-cue{
+    position:absolute; bottom:2.2rem; left:50%; transform:translateX(-50%); /* centers it horizontally regardless of its own width */
+    display:flex; flex-direction:column; align-items:center; gap:0.5rem;
+    color:var(--text-faint);
+    font-family:var(--font-mono);
+    font-size:0.65rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    z-index:1;
+}
+.scroll-cue .line{
+    width:1px; height:34px;
+    background:linear-gradient(var(--text-faint), transparent); /* fades from visible at top to invisible at bottom */
+    animation:scrolldrift 1.8s ease-in-out infinite;
+}
+
+/* ---- Keyframe animations ----
+   These define the actual motion referenced by "animation:" above.
+   Think of each keyframe as a snapshot at a % point in time. */
+@keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:0.35; } } /* fades in and out */
+@keyframes scrolldrift{
+    0%{ transform:scaleY(0.4); opacity:0.2; }   /* starts short and faint */
+    50%{ transform:scaleY(1); opacity:1; }      /* grows to full length and bright */
+    100%{ transform:scaleY(0.4); opacity:0.2; } /* shrinks back down — creates a "breathing" line */
+}
+
+/* =============================================================
+   TIMELINE / PHASE SECTIONS
+   Everything below the hero — the actual watch-order content.
+============================================================= */
+.timeline{ max-width:1180px; margin:0 auto; padding:2rem 1.5rem 0; } /* centers the whole timeline column and caps its width */
+
+.phase{
+    position:relative; /* lets child pseudo-elements position themselves relative to this section */
+    padding:4.5rem 0 1rem;
+    /* This is the DEFAULT phase color if nothing overrides it.
+       Each <section> in the HTML overrides this inline with its
+       own color via style="--phase-color:...". */
+    --phase-color: var(--amber);
+}
+.phase-header{
+    text-align:center;
+    max-width:38rem; /* keeps the phase description from getting too wide/hard to read */
+    margin:0 auto 3.2rem; /* auto left/right margin centers the block */
+    position:relative; z-index:2;
+}
+.phase-code{
+    display:inline-block;
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    color:var(--phase-color); /* uses whatever --phase-color this section defined, so each phase's label is a different color */
+    margin-bottom:0.9rem;
+}
+.phase-title{
+    font-size:clamp(1.5rem, 3vw, 2rem); /* responsive: scales between 1.5rem and 2rem depending on screen width */
+    font-weight:700;
+    margin-bottom:0.7rem;
+}
+.phase-desc{ color:var(--text-dim); font-size:0.95rem; }
+
+/* ---- The glowing vertical "spine" line running through each phase ---- */
+.spine-track{ position:relative; } /* the anchor point for the absolutely-positioned line below */
+.spine-track::before{
+    content:'';
+    position:absolute;
+    left:50%; top:0; bottom:0; /* stretches from the very top to the very bottom of the section */
+    width:2px;
+    transform:translateX(-50%); /* nudges it left by half its own width so it's perfectly centered */
+    background:linear-gradient(var(--phase-color), var(--phase-color)); /* solid color, but written as a gradient so it can be combined/faded later if wanted */
+    opacity:0.55;
+    box-shadow:0 0 16px var(--phase-color); /* the glow effect around the line */
+}
+/* Phases marked "multiverse" (Phase 4, 5, 6 in the HTML) get an
+   extra faint line to the LEFT of the main spine, suggesting the
+   timeline has split into multiple branches. */
+.phase.multiverse .spine-track::after{
+    content:'';
+    position:absolute;
+    left:calc(50% - 10px); top:0; bottom:0; /* 10px to the left of dead-center */
+    width:1px;
+    background:linear-gradient(var(--phase-color), transparent 95%); /* fades out near the bottom */
+    opacity:0.3;
+}
+/* The matching line to the RIGHT of center. This one is a real
+   <div class="thread-r"> in the HTML (not a pseudo-element),
+   because a single element only gets two pseudo-elements
+   (::before and ::after) and we needed three lines total. */
+.phase.multiverse .spine-track .thread-r{
+    content:'';
+    position:absolute;
+    left:calc(50% + 10px); top:0; bottom:0; /* 10px to the right of dead-center */
+    width:1px;
+    background:linear-gradient(var(--phase-color), transparent 95%);
+    opacity:0.3;
+}
+
+/* ---- The list of movie/show cards inside each phase ---- */
+.entries{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2.6rem; } /* stacks entries vertically with even spacing, no bullets */
+
+.entry{
+    position:relative; /* anchor point for absolutely-positioned children */
+    display:grid;
+    /* Three columns: left card slot | thin center gutter for the dot | right card slot.
+       Cards alternate which slot they sit in — see .entry:nth-child(even) below. */
+    grid-template-columns:1fr 40px 1fr;
+    align-items:start;
+    gap:0 1.6rem; /* no vertical gap (handled by .entries), horizontal gap between columns */
+}
+/* The actual checkbox is invisible — we hide it but keep it
+   functional, because clicking the styled <label> below toggles
+   it, and CSS can react to its :checked state. */
+.entry-check{ position:absolute; opacity:0; pointer-events:none; }
+
+.entry-marker{
+    grid-column:2; /* always sits in the middle "spine" column */
+    justify-self:center;
+    width:14px; height:14px;
+    border-radius:50%; /* makes it a circle */
+    background:var(--bg); /* looks "hollow" against the dark background until checked */
+    border:2px solid var(--phase-color);
+    margin-top:2.1rem; /* nudges it down to roughly align with the card's title */
+    z-index:2;
+    transition:box-shadow .25s ease, background .25s ease; /* smooth animation when it lights up */
+}
+/* THE KEY TRICK: "~" is the general sibling selector. It means
+   "select .entry-marker that comes AFTER a checked .entry-check,
+   as long as they share the same parent." This is how we make
+   the dot light up using only CSS, no JavaScript. */
+.entry-check:checked ~ .entry-marker{
+    background:var(--phase-color); /* fills solid */
+    box-shadow:0 0 14px var(--phase-color); /* glows */
+}
+
+.entry-card{
+    grid-column:1; /* by default, cards sit in the LEFT column */
+    display:flex; gap:1.1rem; /* poster and text sit side by side */
+    background:linear-gradient(180deg, var(--surface), var(--surface-2)); /* subtle top-to-bottom gradient */
+    border:1px solid var(--border);
+    border-left:3px solid var(--phase-color); /* thick colored accent stripe on the left edge */
+    border-radius:var(--radius);
+    padding:1rem;
+    cursor:pointer; /* shows a hand cursor, since the whole card is clickable (it's a <label>) */
+    transition:transform .25s ease, border-color .25s ease, opacity .25s ease;
+}
+/* Every OTHER card (2nd, 4th, 6th...) is flipped to the RIGHT
+   column instead, which is what creates the "alternating left/
+   right" zigzag look down the timeline. */
+.entry:nth-child(even) .entry-card{ grid-column:3; }
+.entry-card:hover{ transform:translateY(-2px); } /* lifts slightly on hover for a tactile feel */
+
+/* Same sibling trick as the marker: when the hidden checkbox is
+   checked, dim the card and strike through its title. */
+.entry-check:checked ~ .entry-card{ opacity:0.45; }
+.entry-check:checked ~ .entry-card .entry-title{ text-decoration:line-through; text-decoration-color:var(--phase-color); }
+.entry-check:focus-visible ~ .entry-card{ outline:2px solid var(--phase-color); outline-offset:2px; } /* keyboard focus ring on the card, since the real checkbox is invisible */
+
+.poster-frame{
+    flex:0 0 auto; /* don't grow or shrink — keep it a fixed size */
+    width:76px; height:112px; /* roughly a movie-poster aspect ratio */
+    border-radius:var(--radius-sm);
+    overflow:hidden; /* clips the <img> inside to these rounded corners */
+    border:1px solid var(--border);
+    background:var(--bg-alt); /* shows through if the image hasn't loaded yet */
+}
+.poster{ width:100%; height:100%; object-fit:cover; } /* fills the frame completely without distorting the image's proportions */
+
+.entry-body{ min-width:0; flex:1; } /* min-width:0 lets long titles wrap properly instead of overflowing a flex child */
+.entry-meta{
+    font-family:var(--font-mono);
+    font-size:0.68rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--phase-color); /* the "2008 · Movie · 2h6m" line uses the phase's accent color */
+    margin-bottom:0.35rem;
+}
+.entry-title{
+    font-family:var(--font-head);
+    font-weight:600;
+    font-size:1rem;
+    margin-bottom:0.4rem;
+    color:var(--text);
+}
+.entry-note{
+    font-size:0.85rem;
+    color:var(--text-dim);
+    margin-bottom:0.6rem;
+}
+.entry-status{
+    font-family:var(--font-mono);
+    font-size:0.65rem;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+}
+/* There are TWO spans in the HTML: "Not watched" and "✓ Watched".
+   By default the watched one is hidden... */
+.status-watched{ display:none; color:var(--phase-color); }
+/* ...and when the checkbox is checked, we flip which one shows,
+   again using the sibling-selector trick — no JavaScript needed
+   to swap the text. */
+.entry-check:checked ~ .entry-card .status-unwatched{ display:none; }
+.entry-check:checked ~ .entry-card .status-watched{ display:inline; }
+
+/* =============================================================
+   CONVERGENCE VISUAL (the small SVG graphic before the finale)
+============================================================= */
+.convergence{
+    max-width:420px;
+    margin:2rem auto -1rem; /* negative bottom margin pulls the finale card up closer, so they feel connected */
+    display:block;
+}
+.convergence-label{
+    text-align:center;
+    font-family:var(--font-mono);
+    font-size:0.68rem;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    margin-top:0.6rem;
+}
+
+/* =============================================================
+   FINALE CARD (the big Avengers: Doomsday callout at the bottom)
+============================================================= */
+.finale{
+    max-width:640px;
+    margin:1rem auto 6rem; /* centers it and gives generous space before the footer */
+    padding:2.6rem 2rem;
+    text-align:center;
+    border-radius:20px;
+    border:1px solid rgba(244,197,66,0.3); /* thin gold border to mark this as special/different from regular cards */
+    background:
+            radial-gradient(ellipse 100% 80% at 50% 0%, rgba(244,197,66,0.12), transparent 70%), /* gold glow from the top */
+            var(--surface);
+    box-shadow:0 0 90px rgba(244,197,66,0.08); /* soft gold glow cast onto the page around the card */
+}
+.finale-poster{
+    width:150px; height:222px; /* bigger than the regular poster frames, since this is the "main event" */
+    margin:0 auto 1.6rem;
+    border-radius:var(--radius);
+    overflow:hidden;
+    border:1px solid rgba(244,197,66,0.4);
+    box-shadow:0 0 40px rgba(244,197,66,0.15);
+}
+.finale-eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:0.8rem;
+}
+.finale-title{
+    font-family:var(--font-display); /* same dramatic font as the hero title */
+    font-weight:800;
+    font-size:clamp(1.9rem, 5vw, 2.8rem);
+    color:#fff;
+    margin-bottom:0.8rem;
+}
+.finale-note{
+    color:var(--text-dim);
+    font-size:0.95rem;
+    max-width:30rem;
+    margin:0 auto 1.4rem; /* auto left/right centers the paragraph block itself */
+}
+.finale-date{
+    display:inline-block;
+    font-family:var(--font-mono);
+    font-size:0.85rem;
+    letter-spacing:0.08em;
+    color:var(--gold);
+}
+
+/* =============================================================
+   FOOTER
+============================================================= */
+footer{
+    text-align:center;
+    padding:3rem 1.5rem 4rem;
+    color:var(--text-faint);
+    font-family:var(--font-mono);
+    font-size:0.7rem;
+    letter-spacing:0.08em;
+}
+
+/* =============================================================
+   RESPONSIVE BREAKPOINTS
+   Media queries let us apply different CSS depending on screen
+   width. "max-width:820px" means "apply this on screens 820px
+   wide or narrower" — i.e. tablets and phones.
+============================================================= */
+@media (max-width:820px){
+    /* Collapse the 3-column grid (left card / gutter / right card)
+       down to a simple 2-column layout: dot, then card. This turns
+       the zigzag desktop layout into a single vertical column. */
+    .entry{ grid-template-columns:28px 1fr; gap:0 1rem; }
+    .entry-marker{ grid-column:1; margin-top:1.4rem; }
+    .entry-card, .entry:nth-child(even) .entry-card{ grid-column:2; } /* both odd AND even cards now go in the same column */
+    .spine-track::before{ left:14px; }              /* move the main spine line to the left edge instead of center */
+    .phase.multiverse .spine-track::after{ left:6px; }   /* reposition the left thread line to match */
+    .phase.multiverse .spine-track .thread-r{ left:22px; } /* reposition the right thread line to match */
+    .nav{ padding:0.8rem 1rem; }
+    .nav-brand{ display:none; } /* hide the brand text on small screens to save space, keep only the phase links */
+}
+@media (max-width:480px){
+    /* On very narrow phone screens, stack the poster ABOVE the text
+       instead of beside it, since side-by-side gets too cramped. */
+    .entry-card{ flex-direction:column; }
+    .poster-frame{ width:100%; height:150px; }
+}
+
+/* Respects the OS-level "reduce motion" accessibility setting.
+   Some people get motion sickness or find animation distracting —
+   this turns all animations effectively instant for them. */
+@media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; }
+}
