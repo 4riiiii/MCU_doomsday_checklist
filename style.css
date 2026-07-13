@@ -201,24 +201,54 @@ a:focus-visible, label:focus-within, button:focus-visible{
     margin-bottom:2.2rem;
 }
 .hero-sub strong{ color:var(--text); font-weight:600; } /* makes bolded words inside the subtitle stand out brighter */
-.hero-date{
-    display:inline-flex; align-items:center; gap:0.6rem; /* lays the dot + text side by side, vertically centered */
-    font-family:var(--font-mono);
-    font-size:0.85rem;
-    letter-spacing:0.08em;
-    color:var(--gold);
-    border:1px solid rgba(244,197,66,0.35); /* thin gold border, gives it a "badge/pill" look */
-    background:rgba(244,197,66,0.06);       /* very faint gold tint fill */
-    padding:0.55rem 1.1rem;
-    border-radius:999px; /* a huge radius on a small element = fully rounded "pill" shape */
+.hero-countdown{
+    display:flex; flex-direction:column; align-items:center; gap:0.65rem;
     z-index:1;
 }
-.hero-date .dot{
-    width:6px; height:6px; border-radius:50%; /* a tiny circle */
-    background:var(--gold);
-    box-shadow:0 0 10px var(--gold); /* glow around the dot */
-    animation:pulse 1.8s ease-in-out infinite; /* runs the "pulse" keyframes below forever */
+.countdown-units{
+    display:flex; align-items:center; gap:0.55rem;
 }
+.countdown-unit{
+    display:flex; flex-direction:column; align-items:center; gap:0.15rem;
+    min-width:2.6rem;
+}
+.countdown-num{
+    font-family:var(--font-mono);
+    font-weight:600;
+    font-size:1.6rem;
+    color:var(--gold);
+    text-shadow:0 0 18px rgba(244,197,66,0.35);
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+}
+.countdown-label{
+    font-family:var(--font-mono);
+    font-size:0.6rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+}
+.countdown-sep{
+    font-family:var(--font-mono);
+    font-size:1.2rem;
+    color:var(--text-faint);
+    margin-bottom:1.1rem;
+}
+.countdown-caption{
+    display:inline-flex; align-items:center; gap:0.5rem;
+    font-family:var(--font-mono);
+    font-size:0.75rem;
+    letter-spacing:0.08em;
+    color:var(--text-dim);
+    text-transform:uppercase;
+}
+.countdown-caption .dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 10px var(--gold);
+    animation:pulse 1.8s ease-in-out infinite;
+}
+
 .scroll-cue{
     position:absolute; bottom:2.2rem; left:50%; transform:translateX(-50%); /* centers it horizontally regardless of its own width */
     display:flex; flex-direction:column; align-items:center; gap:0.5rem;
@@ -538,4 +568,75 @@ footer{
 @media (prefers-reduced-motion: reduce){
     html{ scroll-behavior:auto; }
     *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; }
+}
+
+/* ============================================================
+   PROGRESS TALLY
+   CSS can keep a running count using "counters" — the same
+   mechanism that numbers an ordered list. Every checked box
+   bumps the tally by 1.
+   CATCH: the element that DISPLAYS the number has to sit further
+   DOWN the page than every checkbox, because CSS counters only
+   count things that come earlier in the document. That's why
+   the panel below goes after Phase 6, not up in the nav.
+============================================================ */
+body{ counter-reset: watched 0; }                   /* starts the tally at 0 */
+.entry-check:checked{ counter-increment: watched; } /* every checked box adds 1 */
+
+.status-panel{
+    max-width:420px;
+    margin:3rem auto 1rem;
+    padding:1.4rem 1.6rem;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    background:var(--surface);
+    text-align:center;
+}
+.status-label{
+    font-family:var(--font-mono);
+    font-size:0.68rem;
+    letter-spacing:0.25em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+}
+.status-count{
+    font-family:var(--font-mono);
+    font-size:0.95rem;
+    color:var(--gold);
+    margin-left:0.4rem;
+}
+/* the actual number gets injected here — counter(watched) reads the running tally */
+.status-count::after{ content: counter(watched) " / 24 WATCHED"; }
+
+.tick-row{
+    display:flex; flex-wrap:wrap; gap:5px;
+    justify-content:center;
+    margin-top:0.9rem;
+}
+.tick{
+    width:10px; height:10px;
+    border-radius:3px;
+    background:rgba(255,255,255,0.08);
+    transition: background .3s ease, box-shadow .3s ease;
+}
+
+/* Each tick is wired to ITS OWN checkbox using :has() — a newer
+   CSS feature that lets a parent react to what's happening
+   somewhere inside it. "body:has(#e1:checked)" reads as "if the
+   checkbox with id=e1 is checked anywhere in the body" — when
+   true, it lights up tick .t1. One line per checkbox, e1–e24. */
+body:has(#e1:checked) .t1,  body:has(#e2:checked) .t2,
+body:has(#e3:checked) .t3,  body:has(#e4:checked) .t4,
+body:has(#e5:checked) .t5,  body:has(#e6:checked) .t6,
+body:has(#e7:checked) .t7,  body:has(#e8:checked) .t8,
+body:has(#e9:checked) .t9,  body:has(#e10:checked) .t10,
+body:has(#e11:checked) .t11, body:has(#e12:checked) .t12,
+body:has(#e13:checked) .t13, body:has(#e14:checked) .t14,
+body:has(#e15:checked) .t15, body:has(#e16:checked) .t16,
+body:has(#e17:checked) .t17, body:has(#e18:checked) .t18,
+body:has(#e19:checked) .t19, body:has(#e20:checked) .t20,
+body:has(#e21:checked) .t21, body:has(#e22:checked) .t22,
+body:has(#e23:checked) .t23, body:has(#e24:checked) .t24{
+    background:var(--gold);
+    box-shadow:0 0 6px var(--gold);
 }

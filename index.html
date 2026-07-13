@@ -71,7 +71,30 @@
     <!-- <br> forces a line break inside the title exactly where we want it -->
     <p class="hero-sub">Every essential film and series that feeds into <strong>Avengers: Doomsday</strong> —
         three universes, one collision course. Check off what you've watched as you go.</p>
-    <div class="hero-date"><span class="dot"></span> IN THEATERS DECEMBER 18, 2026</div>
+    <div class="hero-countdown" id="doomsday-countdown">
+        <div class="countdown-units">
+            <div class="countdown-unit">
+                <span class="countdown-num" id="cd-days">00</span>
+                <span class="countdown-label">days</span>
+            </div>
+            <span class="countdown-sep">:</span>
+            <div class="countdown-unit">
+                <span class="countdown-num" id="cd-hours">00</span>
+                <span class="countdown-label">hrs</span>
+            </div>
+            <span class="countdown-sep">:</span>
+            <div class="countdown-unit">
+                <span class="countdown-num" id="cd-mins">00</span>
+                <span class="countdown-label">min</span>
+            </div>
+            <span class="countdown-sep">:</span>
+            <div class="countdown-unit">
+                <span class="countdown-num" id="cd-secs">00</span>
+                <span class="countdown-label">sec</span>
+            </div>
+        </div>
+        <div class="countdown-caption"><span class="dot"></span> until doomsday · december 18, 2026</div>
+    </div>
     <!-- the "dot" span is an empty element — CSS turns it into a small glowing circle, it doesn't need any text/content itself -->
     <div class="scroll-cue"><span>Begin</span><span class="line"></span></div>
 </section>
@@ -301,7 +324,7 @@
                     <input type="checkbox" id="e10" class="entry-check">
                     <div class="entry-marker"></div>
                     <label for="e10" class="entry-card">
-                        <div class="poster-frame"><img class="poster" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='445'%3E%3Crect width='100%25' height='100%25' fill='%230d1117'/%3E%3Ctext x='50%25' y='50%25' fill='%233a4354' font-family='monospace' font-size='14' text-anchor='middle' dy='.3em'%3EPOSTER%3C/text%3E%3C/svg%3E" alt="Black Panther poster — replace src with real poster URL"></div>
+                        <div class="poster-frame"><img class="poster" src="https://m.media-amazon.com/images/S/pv-target-images/f94ce28b7bcd0a966f5a008861cf2c25cef85906582f6303021a763949817519.jpg width='300' height='445'%3E%3Crect width='100%25' height='100%25' fill='%230d1117'/%3E%3Ctext x='50%25' y='50%25' fill='%233a4354' font-family='monospace' font-size='14' text-anchor='middle' dy='.3em'%3EPOSTER%3C/text%3E%3C/svg%3E" alt="Black Panther poster — replace src with real poster URL"></div>
                         <div class="entry-body">
                             <div class="entry-meta">2018 · Movie · 2h14m</div>
                             <div class="entry-title">Black Panther</div>
@@ -570,6 +593,19 @@
         </div>
     </section>
 
+    <div class="status-panel">
+        <span class="status-label">MISSION STATUS</span>
+        <span class="status-count"></span>
+        <div class="tick-row">
+            <span class="tick t1"></span><span class="tick t2"></span><span class="tick t3"></span><span class="tick t4"></span>
+            <span class="tick t5"></span><span class="tick t6"></span><span class="tick t7"></span><span class="tick t8"></span>
+            <span class="tick t9"></span><span class="tick t10"></span><span class="tick t11"></span><span class="tick t12"></span>
+            <span class="tick t13"></span><span class="tick t14"></span><span class="tick t15"></span><span class="tick t16"></span>
+            <span class="tick t17"></span><span class="tick t18"></span><span class="tick t19"></span><span class="tick t20"></span>
+            <span class="tick t21"></span><span class="tick t22"></span><span class="tick t23"></span><span class="tick t24"></span>
+        </div>
+    </div>
+
     <!-- =========================================================
          CONVERGENCE VISUAL — a hand-drawn inline SVG (not an image
          file, the actual shape data lives right here in the HTML).
@@ -633,6 +669,30 @@
 <footer>
     Built for the marathon before the multiverse collides.
 </footer>
+<script>
+    (function () {
+        var target = new Date('2026-12-18T00:00:00');
+        var elDays = document.getElementById('cd-days');
+        var elHours = document.getElementById('cd-hours');
+        var elMins = document.getElementById('cd-mins');
+        var elSecs = document.getElementById('cd-secs');
+
+        function pad(n) { return String(n).padStart(2, '0'); }
+
+        function tick() {
+            var diff = target - new Date();
+            if (diff <= 0) { elDays.textContent = elHours.textContent = elMins.textContent = elSecs.textContent = '00'; return; }
+            var totalSeconds = Math.floor(diff / 1000);
+            elDays.textContent = pad(Math.floor(totalSeconds / 86400));
+            elHours.textContent = pad(Math.floor((totalSeconds % 86400) / 3600));
+            elMins.textContent = pad(Math.floor((totalSeconds % 3600) / 60));
+            elSecs.textContent = pad(totalSeconds % 60);
+        }
+
+        tick();
+        setInterval(tick, 1000);
+    })();
+</script>
 
 </body>
 </html>
